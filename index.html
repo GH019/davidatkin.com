@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>David Atkin | Technology, Infrastructure & Problem Solving</title>
 
-<meta name="description" content="David Atkin - IT professional, Microsoft 365 specialist, infrastructure engineer and technology enthusiast.">
+<meta name="description" content="Technical fixes, troubleshooting notes and IT insights from David Atkin.">
 
 <style>
 :root {
@@ -14,6 +14,7 @@
     --text: #374151;
     --light: #f8fafc;
     --border: #e5e7eb;
+    --accent: #06b6d4;
 }
 
 * {
@@ -42,26 +43,39 @@ header {
 
 nav {
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
     align-items: center;
     padding: 1.25rem 0;
 }
 
 .logo {
-    font-size: 1.3rem;
+    font-size: 1.8rem;
     font-weight: 700;
     color: var(--dark);
+    text-align: center;
 }
 
 .hero {
     padding: 6rem 0;
     text-align: center;
+    background:
+        linear-gradient(
+            135deg,
+            rgba(37,99,235,0.08),
+            rgba(6,182,212,0.05)
+        );
 }
 
 .hero h1 {
     font-size: 3rem;
-    color: var(--dark);
     margin-bottom: 1rem;
+    background: linear-gradient(
+        90deg,
+        #2563eb,
+        #06b6d4
+    );
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
 }
 
 .hero p {
@@ -74,36 +88,73 @@ nav {
     padding: 4rem 0;
 }
 
-.section h2 {
-    color: var(--dark);
+.section-heading {
+    text-align: center;
     margin-bottom: 2rem;
+}
+
+.section h2 {
+    display: inline-block;
+    color: var(--dark);
     font-size: 2rem;
+    border-bottom: 4px solid var(--primary);
+    padding-bottom: 0.5rem;
 }
 
 .card {
     background: white;
     padding: 2rem;
     border-radius: 12px;
-    border: 1px solid var(--border);
-    box-shadow: 0 2px 4px rgba(0,0,0,0.04);
+    border-top: 4px solid var(--primary);
+    box-shadow: 0 2px 12px rgba(0,0,0,0.05);
 }
 
 .fix-post h3 {
-    margin-bottom: 1rem;
     color: var(--dark);
+    margin-bottom: 1rem;
 }
 
 .fix-post p {
     margin-bottom: 1rem;
 }
 
+.tag {
+    display: inline-block;
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    margin-right: 8px;
+    margin-bottom: 15px;
+}
+
+.tag-blue {
+    background: #dbeafe;
+    color: #1d4ed8;
+}
+
+.tag-green {
+    background: #dcfce7;
+    color: #166534;
+}
+
+.tag-purple {
+    background: #ede9fe;
+    color: #6d28d9;
+}
+
 pre {
-    background: #111827;
-    color: #f8fafc;
+    background: #0f172a;
+    color: #4ade80;
     padding: 1rem;
     border-radius: 8px;
     overflow-x: auto;
     margin: 1rem 0;
+    font-weight: 600;
+}
+
+ul {
+    margin-left: 20px;
+    margin-bottom: 1rem;
 }
 
 footer {
@@ -111,12 +162,17 @@ footer {
     text-align: center;
     padding: 2rem 0;
     margin-top: 4rem;
-    color: #6b7280;
+    background: #111827;
+    color: #d1d5db;
 }
 
 @media (max-width: 768px) {
     .hero h1 {
         font-size: 2.2rem;
+    }
+
+    .hero p {
+        font-size: 1rem;
     }
 }
 </style>
@@ -143,73 +199,91 @@ footer {
 
 <section class="section">
     <div class="container">
-        <h2>About</h2>
+
+        <div class="section-heading">
+            <h2>About</h2>
+        </div>
+
         <div class="card">
             <p>
-                Welcome to davidatkin.com. This site is a basic landing page and collection of useful technical
+                Welcome to davidatkin.com. This site is a collection of useful technical
                 fixes, troubleshooting notes and real-world experiences that may help
                 others facing similar issues.
             </p>
         </div>
+
     </div>
 </section>
 
 <section class="section">
     <div class="container">
-        <h2>Fixes</h2>
+
+        <div class="section-heading">
+            <h2>Fixes</h2>
+        </div>
 
         <article class="card fix-post">
+
+            <div>
+                <span class="tag tag-blue">Windows Server</span>
+                <span class="tag tag-green">Active Directory</span>
+                <span class="tag tag-purple">DNS</span>
+            </div>
+
             <h3>SBS 2011 / Windows Server Trust Relationship Issue After Power Loss</h3>
 
             <p>
-                Recently I had a client with an SBS 2011 server that lost power unexpectedly.
-                Following the outage, client PCs were unable to access server resources and
-                displayed messages suggesting the computer or domain relationship may have
-                been compromised.
+                Recently I had a client with an SBS2011 who lost power to the server.
+                Client PCs were unable to access the server resources and errored saying
+                that the PC may have been compromised.
             </p>
 
             <p>
-                Once the server had rebooted, the network profile had changed to
-                <strong>Unauthenticated Network</strong>. Attempting to open the DNS
-                Management console resulted in an <strong>Access Denied</strong> error.
+                When the server had rebooted the network location had changed to
+                <strong>Unauthenticated</strong>. When trying to access the DNS console
+                I was getting an error saying <strong>Access Denied</strong>.
             </p>
 
-            <p><strong>Symptoms observed:</strong></p>
+            <p><strong>See below for reference:</strong></p>
 
-            <ul style="margin-left: 20px; margin-bottom: 1rem;">
-                <li>DNS console reporting Access Denied.</li>
-                <li>DCDiag failing connectivity tests.</li>
-                <li>Active Directory Users and Computers still accessible.</li>
-                <li>Clients unable to access server shares and services.</li>
-            </ul>
+            <p><em>DNS Access Denied</em></p>
 
             <p>
-                After some investigation I was able to resolve the issue by resetting
-                the secure channel password and then rebooting the server using:
+                DCDiag was failing on connectivity but Active Directory Users and Computers
+                was accessible.
+            </p>
+
+            <p>
+                After a while I managed to resolve the error by running the below command
+                followed by a reboot:
             </p>
 
 <pre>nltest /sc_change_pwd:domainname.local</pre>
 
-            <h4 style="margin-bottom: 0.75rem;">Command Description</h4>
+            <h4>Command Description</h4>
 
             <p>
                 Changes the password for the trust account of a domain that you specify.
-                If you run NLTest on a domain controller and an explicit trust relationship
-                exists, NLTest resets the password for the inter-domain trust account.
-                Otherwise, it changes the computer account password for the specified domain.
+                If you run nltest on a domain controller, and an explicit trust relationship
+                exists, then nltest resets the password for the interdomain trust account.
+                Otherwise, nltest changes the computer account password for the domain that
+                you specify. You can use this parameter only for computers that are running
+                Windows 2000 and later.
             </p>
 
             <p>
-                Following the reboot, the network location returned to
-                <strong>Domain Network</strong>, DNS became accessible again and
-                all client machines were able to access server resources normally.
+                Once the server had rebooted the network location changed back to
+                <strong>Domain</strong> and DNS was accessible. All client machines were
+                then able to access the server.
             </p>
 
             <p>
-                Comments from administrators on my original blog post indicate that
-                this fix also resolves the same issue on <strong>Windows Server 2012 R2</strong>.
+                Comments on my blog have indicated that this fix also works with
+                <strong>Server 2012 R2</strong>.
             </p>
+
         </article>
+
     </div>
 </section>
 
