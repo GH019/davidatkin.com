@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>David Atkin | Technology, Infrastructure & Problem Solving</title>
+
+<meta name="description" content="David Atkin - IT professional, Microsoft 365 specialist, infrastructure engineer and technology enthusiast.">
+
+<style>
+:root {
+    --primary: #2563eb;
+    --dark: #111827;
+    --text: #374151;
+    --light: #f8fafc;
+    --border: #e5e7eb;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    line-height: 1.7;
+    color: var(--text);
+    background: var(--light);
+}
+
+.container {
+    max-width: 1100px;
+    margin: auto;
+    padding: 0 20px;
+}
+
+header {
+    background: white;
+    border-bottom: 1px solid var(--border);
+}
+
+nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.25rem 0;
+}
+
+.logo {
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: var(--dark);
+}
+
+.hero {
+    padding: 6rem 0;
+    text-align: center;
+}
+
+.hero h1 {
+    font-size: 3rem;
+    color: var(--dark);
+    margin-bottom: 1rem;
+}
+
+.hero p {
+    max-width: 700px;
+    margin: auto;
+    font-size: 1.2rem;
+}
+
+.section {
+    padding: 4rem 0;
+}
+
+.section h2 {
+    color: var(--dark);
+    margin-bottom: 2rem;
+    font-size: 2rem;
+}
+
+.card {
+    background: white;
+    padding: 2rem;
+    border-radius: 12px;
+    border: 1px solid var(--border);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.04);
+}
+
+.fix-post h3 {
+    margin-bottom: 1rem;
+    color: var(--dark);
+}
+
+.fix-post p {
+    margin-bottom: 1rem;
+}
+
+pre {
+    background: #111827;
+    color: #f8fafc;
+    padding: 1rem;
+    border-radius: 8px;
+    overflow-x: auto;
+    margin: 1rem 0;
+}
+
+footer {
+    border-top: 1px solid var(--border);
+    text-align: center;
+    padding: 2rem 0;
+    margin-top: 4rem;
+    color: #6b7280;
+}
+
+@media (max-width: 768px) {
+    .hero h1 {
+        font-size: 2.2rem;
+    }
+}
+</style>
+</head>
+<body>
+
+<header>
+    <div class="container">
+        <nav>
+            <div class="logo">David Atkin</div>
+        </nav>
+    </div>
+</header>
+
+<section class="hero">
+    <div class="container">
+        <h1>Technology, Infrastructure & Problem Solving</h1>
+        <p>
+            Notes, fixes and observations from years of working with Microsoft
+            technologies, business IT systems and infrastructure.
+        </p>
+    </div>
+</section>
+
+<section class="section">
+    <div class="container">
+        <h2>About</h2>
+        <div class="card">
+            <p>
+                Welcome to davidatkin.com. This site is a basic landing page and collection of useful technical
+                fixes, troubleshooting notes and real-world experiences that may help
+                others facing similar issues.
+            </p>
+        </div>
+    </div>
+</section>
+
+<section class="section">
+    <div class="container">
+        <h2>Fixes</h2>
+
+        <article class="card fix-post">
+            <h3>SBS 2011 / Windows Server Trust Relationship Issue After Power Loss</h3>
+
+            <p>
+                Recently I had a client with an SBS 2011 server that lost power unexpectedly.
+                Following the outage, client PCs were unable to access server resources and
+                displayed messages suggesting the computer or domain relationship may have
+                been compromised.
+            </p>
+
+            <p>
+                Once the server had rebooted, the network profile had changed to
+                <strong>Unauthenticated Network</strong>. Attempting to open the DNS
+                Management console resulted in an <strong>Access Denied</strong> error.
+            </p>
+
+            <p><strong>Symptoms observed:</strong></p>
+
+            <ul style="margin-left: 20px; margin-bottom: 1rem;">
+                <li>DNS console reporting Access Denied.</li>
+                <li>DCDiag failing connectivity tests.</li>
+                <li>Active Directory Users and Computers still accessible.</li>
+                <li>Clients unable to access server shares and services.</li>
+            </ul>
+
+            <p>
+                After some investigation I was able to resolve the issue by resetting
+                the secure channel password and then rebooting the server using:
+            </p>
+
+<pre>nltest /sc_change_pwd:domainname.local</pre>
+
+            <h4 style="margin-bottom: 0.75rem;">Command Description</h4>
+
+            <p>
+                Changes the password for the trust account of a domain that you specify.
+                If you run NLTest on a domain controller and an explicit trust relationship
+                exists, NLTest resets the password for the inter-domain trust account.
+                Otherwise, it changes the computer account password for the specified domain.
+            </p>
+
+            <p>
+                Following the reboot, the network location returned to
+                <strong>Domain Network</strong>, DNS became accessible again and
+                all client machines were able to access server resources normally.
+            </p>
+
+            <p>
+                Comments from administrators on my original blog post indicate that
+                this fix also resolves the same issue on <strong>Windows Server 2012 R2</strong>.
+            </p>
+        </article>
+    </div>
+</section>
+
+<footer>
+    <div class="container">
+        <p>&copy; 2026 David Atkin. All rights reserved.</p>
+    </div>
+</footer>
+
+</body>
+</html>
